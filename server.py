@@ -5,7 +5,7 @@ app = Flask(__name__)
 
 @app.route("/send", methods=["POST"])
 def receive_message():
-    data = request.get_json(force=True)   # force JSON parse
+    data = request.get_json(force=True)
     print("\n[DEBUG] Data diterima:", data)
     encrypted_text = data.get("cipher", "")
     decrypted = decrypt_message(encrypted_text)
