@@ -1,17 +1,16 @@
-import socket
+import requests
 from des_utils import encrypt_message, decrypt_message
 
-# Ganti setelah ngrok dijalankan
-HOST = '4.tcp.ngrok.io'
-PORT = 14732
-
-s = socket.socket()
-s.connect((HOST, PORT))
-print("Connected to server!")
+# Ganti URL setelah ngrok dijalankan
+SERVER_URL = "https://abcd-1234.ngrok-free.app/send"
 
 while True:
-    msg = input("You: ")
-    s.send(encrypt_message(msg).encode())
-    data = s.recv(2048).decode()
-    print("\n[Encrypted]:", data)
-    print("[Decrypted]:", decrypt_message(data))
+    message = input("You: ")
+    cipher = encrypt_message(message)
+    payload = {"cipher": cipher}
+    response = requests.post(SERVER_URL, json=payload)
+    data = response.json()
+    
+    reply_enc = data.get("reply")
+    print("\n[Encrypted reply]:", reply_enc)
+    print("[Decrypted reply]:", decrypt_message(reply_enc))
